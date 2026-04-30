@@ -6,7 +6,8 @@ from orion_server import get_orion_entities
 # Variabili d'ambiente configurabili da Docker Compose
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://ollama-backend:11434")
 PILOT_CITIES = os.getenv("PILOT_CITIES", "Aarhus,Athens,Cluj-Napoca,Kajaani,Leuven,Madrid,Parma,Pilsen,Tallinn")
-MODEL_NAME = os.getenv("MODEL_NAME", "mistral-nemo:latest")  # Default se non specificato
+MODEL_NAME = os.getenv("MODEL_NAME", "mistral-nemo:latest")
+IDRA_TAG = os.getenv("IDRA_TAG", "IDRA")
 
 ollama_client = Client(host=OLLAMA_HOST)
 

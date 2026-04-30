@@ -20,6 +20,7 @@ def get_orion_entities(entity_type: str = "*", city: str = None, limit: int = 5)
     cities_env = os.getenv("PILOT_CITIES", "")
     valid_cities = [c.strip().lower() for c in cities_env.split(",") if c.strip()]
 
+    client = None
     try:
         client = pymongo.MongoClient(f"mongodb://{mongo_host}:27017/", serverSelectionTimeoutMS=3000)
         db = client['orion']
@@ -38,7 +39,6 @@ def get_orion_entities(entity_type: str = "*", city: str = None, limit: int = 5)
             query["_id.id"] = {"$regex": re.compile(city_lower, re.IGNORECASE)}
 
         results = list(coll.find(query).limit(limit))
-        client.close()
 
         if not results:
             city_msg = f" in {city}" if city else ""
@@ -48,6 +48,9 @@ def get_orion_entities(entity_type: str = "*", city: str = None, limit: int = 5)
 
     except Exception as e:
         return f"MongoDB Connection Error ({mongo_host}): {str(e)}"
+    finally:
+        if client:
+            client.close()
 
 
 if __name__ == "__main__":
